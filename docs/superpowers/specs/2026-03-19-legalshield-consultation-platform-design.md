@@ -45,7 +45,10 @@ Match legalshield.com's current layout and visual style:
 
 ### Consultation Modal
 - Fields: First Name, Last Name, Phone* (required), Email, ZIP, Plan Interest (dropdown), Best Call Time (dropdown)
-- On submit: insert row into Supabase `leads` table, show success message
+- **Spam protection:** Cloudflare Turnstile (free) CAPTCHA on form submit
+- **Input validation:** Phone format (digits only, 10+ chars), email format (regex), ZIP (5 digits), required fields enforced client-side and server-side
+- On submit: call Supabase Edge Function (not direct insert) which validates inputs, verifies Turnstile token, and inserts into `leads` table with forced `status='New'`, `source='website'`, `assigned_to=NULL`
+- Show success message on completion
 - No localStorage — all data goes to Supabase
 
 ### Mobile
@@ -72,7 +75,7 @@ Level 1: Owner (you)
 ```
 
 - Owner sees everything: all leads, all team members, all commissions, all activity
-- Manager sees: their assigned leads, their callers, their team's commissions
+- Manager sees: their assigned leads, their callers' leads, their team's commissions
 - Caller sees: their assigned leads, their own commissions
 
 ### Portal Sections (nav tabs)
@@ -87,15 +90,23 @@ Level 1: Owner (you)
 Carried over from existing portal with enhancements:
 
 - **Lead table** with columns: Score, Name, Phone, Email/ZIP, Interest, Call Time, Added, Reminder, Status, Assigned To, Actions
-- **Lead scoring** — same algorithm (interest + recency + status + completeness)
+- **Lead scoring algorithm:**
+  - Interest score: SB Pro=10, SB Plus=8, Personal+Home Biz=7, SB Essentials=6, Personal+Trial=5, Personal/Family=4, Not sure=2
+  - Recency: <2hrs=+8, <12hrs=+5, <24hrs=+3, <72hrs=+1
+  - Status: New=+3, Follow-Up=+2, Called=+1, Enrolled=0, Not Interested=-5
+  - Has call time=+1, Has ZIP=+1
+  - Range: 0-20
 - **Filters** — All, New, Called, Follow-Up, Enrolled, Not Interested
 - **Search** — by name, phone, email
 - **Status badges** — New (blue), Called (yellow), Follow-Up (orange), Enrolled (green), Not Interested (red)
 - **Reminder system** — overdue (red), today (yellow), future (green)
 - **Lead assignment** — Owner/Manager can assign leads to team members via dropdown
-- **Actions** — Call (tel: link), Update (modal with status change, reminder date, call log), Delete
-- **Export CSV** — download filtered leads
-- **Add Lead** — manual entry modal (same fields as existing)
+- **Actions by role:**
+  - All roles: Call (tel: link), Update (modal with status change, reminder date, call log)
+  - Owner and Manager: Delete button visible and functional
+  - Caller: No delete button shown
+- **Export CSV** — downloads filtered leads respecting role visibility (Caller exports only their leads, Manager exports their team's leads, Owner exports all)
+- **Add Lead** — manual entry modal (first_name, last_name, phone, email, zip, interest, call_time, status, reminder, notes)
 - **Update modal** — change status, set reminder, add call log entry, view log history
 - All data from Supabase, real-time subscriptions for live updates
 
@@ -103,18 +114,23 @@ Carried over from existing portal with enhancements:
 Carried over from existing portal:
 
 - **Stats cards** — Total Earnings Est., This Month, Total Enrolled, Avg. Plan Value
-- **Commission rate guide table** — plans, monthly fees, estimated commissions
-- **Enrollment log** — date, member name, plan, monthly fee, est. commission, notes, delete
-- **Log Enrollment modal** — member name, plan (dropdown with auto-calculated commission), date, notes
+- **Commission rate guide table** — plans, monthly fees, estimated commissions (updated pricing)
+- **Enrollment log** — date, member name, plan, monthly fee, est. commission, linked lead (if applicable), notes, delete
+- **Log Enrollment modal** — member name, plan (dropdown with auto-calculated commission), date, notes, optional lead link (dropdown of Enrolled leads)
 - **Override visibility** — Owner sees team commissions + override earnings. Manager sees their callers' commissions.
+- **Update/delete by role:** Owner can update/delete any commission. Manager can update/delete their own and their callers'. Caller can update their own only.
 - Updated pricing to match legalshield.com ($35.95/mo personal plan)
 
 #### 3.4 Team Management (new section)
-- **Team tree view** — visual hierarchy showing Owner → Managers → Callers
+- **Team tree view** — visual hierarchy showing Owner -> Managers -> Callers
 - **Invite member** — modal with: Name, Email, Role (Manager or Caller), sends Supabase auth invite email
-- **Member cards** — name, role, status (active/invited), leads assigned, enrollments, last active
+- **Member cards** — name, role, status (active/invited/deactivated), leads assigned, enrollments, last active (derived from `updated_at` on profiles)
 - **Performance table** — sortable by: enrollments this month, total enrollments, lead conversion rate, calls logged
-- **Deactivate/remove member** — soft delete (preserves history)
+- **Deactivate/remove member** — soft delete (sets `profiles.status='deactivated'`):
+  - Deactivated member cannot log in (checked on auth via RLS)
+  - Leads assigned to deactivated member become unassigned (`assigned_to=NULL`) so Owner/Manager can reassign
+  - Commissions logged by deactivated member remain visible (historical record preserved)
+  - Deactivated profiles still appear in team tree with "deactivated" badge
 
 #### 3.5 Plans & Pricing (reference)
 Carried over as-is from existing portal. Toggle Personal/Business, plan cards with features. Updated pricing.
@@ -139,34 +155,37 @@ Carried over as-is. Key numbers, prices at a glance, always included features, b
 | email | text | |
 | full_name | text | |
 | role | text | 'owner', 'manager', 'caller' |
-| parent_id | uuid FK → profiles.id | Who recruited them (null for owner) |
+| parent_id | uuid FK -> profiles.id | Who recruited them (null for owner) |
 | status | text | 'active', 'invited', 'deactivated' |
-| created_at | timestamptz | |
+| created_at | timestamptz | DEFAULT now() |
+| updated_at | timestamptz | DEFAULT now(), auto-updated via trigger |
 
 ### `leads`
 | Column | Type | Notes |
 |--------|------|-------|
 | id | bigint PK | auto-increment |
-| name | text | required |
-| phone | text | required |
-| email | text | |
-| zip | text | |
+| first_name | text | required |
+| last_name | text | |
+| phone | text | required, validated (10+ digits) |
+| email | text | validated email format |
+| zip | text | 5 digits |
 | interest | text | plan interest from form |
 | call_time | text | preferred call time |
 | status | text | 'New', 'Called', 'Follow-Up', 'Enrolled', 'Not Interested' |
 | reminder | date | follow-up reminder date |
-| assigned_to | uuid FK → profiles.id | which team member owns this lead |
+| assigned_to | uuid FK -> profiles.id | which team member owns this lead |
 | source | text | 'website' or 'manual' |
-| created_at | timestamptz | |
+| created_at | timestamptz | DEFAULT now() |
+| updated_at | timestamptz | DEFAULT now(), auto-updated via trigger |
 
 ### `lead_logs`
 | Column | Type | Notes |
 |--------|------|-------|
 | id | bigint PK | auto-increment |
-| lead_id | bigint FK → leads.id | |
-| author_id | uuid FK → profiles.id | who logged this |
+| lead_id | bigint FK -> leads.id | ON DELETE CASCADE |
+| author_id | uuid FK -> profiles.id | who logged this |
 | note | text | call notes |
-| created_at | timestamptz | |
+| created_at | timestamptz | DEFAULT now() |
 
 ### `commissions`
 | Column | Type | Notes |
@@ -177,33 +196,76 @@ Carried over as-is. Key numbers, prices at a glance, always included features, b
 | monthly_fee | numeric | |
 | est_commission | numeric | |
 | notes | text | |
-| logged_by | uuid FK → profiles.id | which team member enrolled them |
-| created_at | timestamptz | |
+| lead_id | bigint FK -> leads.id | optional, links to originating lead |
+| logged_by | uuid FK -> profiles.id | which team member enrolled them |
+| created_at | timestamptz | DEFAULT now() |
+| updated_at | timestamptz | DEFAULT now(), auto-updated via trigger |
+
+### Foreign Key Cascade Behavior
+- `lead_logs.lead_id` -> `leads.id`: **ON DELETE CASCADE** (delete lead = delete its logs)
+- `commissions.lead_id` -> `leads.id`: **ON DELETE SET NULL** (delete lead preserves commission record)
+- `leads.assigned_to` -> `profiles.id`: **ON DELETE SET NULL** (delete profile unassigns leads)
+- `commissions.logged_by` -> `profiles.id`: **ON DELETE SET NULL** (delete profile preserves commission)
+- `profiles.parent_id` -> `profiles.id`: **ON DELETE SET NULL** (delete parent orphans children to top level)
+
+### Database Triggers
+- **`updated_at` trigger** on `leads`, `profiles`, `commissions`: auto-set `updated_at = now()` on any UPDATE
+- **`profiles.updated_at` touch trigger**: when a user performs any action (insert lead_log, update lead, insert commission), touch their `profiles.updated_at` to track "last active"
 
 ### Row Level Security (RLS)
 
-- **leads (insert):** Allow anonymous inserts (for website form) — only name, phone, email, zip, interest, call_time, status='New', source='website'
-- **leads (select):** Owner sees all. Manager sees leads assigned to self or their callers. Caller sees only their assigned leads.
-- **leads (update):** Same as select — can only update leads you can see.
-- **leads (delete):** Owner only.
-- **lead_logs:** Same visibility as parent lead.
-- **commissions (select):** Owner sees all. Manager sees their own + their callers'. Caller sees only their own.
-- **commissions (insert/delete):** Authenticated users can insert their own. Owner can delete any.
-- **profiles (select):** Owner sees all. Manager sees self + their callers. Caller sees only self.
-- **profiles (insert/update):** Owner can manage all. Manager can invite callers under themselves.
+**leads:**
+- **insert:** Via Edge Function only (anon users cannot insert directly). Authenticated users can insert with `source='manual'`.
+- **select:** Owner sees all. Manager sees leads where `assigned_to` is self OR any profile where `parent_id` = self. Caller sees leads where `assigned_to` = self.
+- **update:** Same as select scope.
+- **delete:** Owner can delete any. Manager can delete leads in their select scope. Caller cannot delete.
+
+**lead_logs:**
+- **select/insert:** Same visibility as parent lead (join on lead_id -> leads with same RLS logic).
+- **delete:** Not allowed (logs are immutable history).
+
+**commissions:**
+- **select:** Owner sees all. Manager sees where `logged_by` = self OR `logged_by` in profiles where `parent_id` = self. Caller sees where `logged_by` = self.
+- **insert:** Authenticated users can insert with `logged_by` = their own id.
+- **update:** Owner can update any. Manager can update where `logged_by` = self or their callers'. Caller can update where `logged_by` = self.
+- **delete:** Owner can delete any. Manager can delete their scope. Caller cannot delete.
+
+**profiles:**
+- **select:** Owner sees all. Manager sees self + profiles where `parent_id` = self. Caller sees only self.
+- **insert:** Owner can insert any. Manager can insert profiles with `parent_id` = self and `role` = 'caller'.
+- **update:** Owner can update any. Manager can update profiles where `parent_id` = self. Caller can update only self (limited to full_name, email).
+- **Auth check:** On login, if `profiles.status = 'deactivated'`, deny access (enforced via RLS on all tables: `status != 'deactivated'` check on the user's own profile).
 
 ---
 
-## 5. Real-Time Features
+## 5. Supabase Edge Function: `submit-lead`
+
+Handles website form submissions securely:
+
+1. Receive POST with: first_name, last_name, phone, email, zip, interest, call_time, turnstile_token
+2. Verify Cloudflare Turnstile token (server-side HTTP call to Turnstile verify endpoint)
+3. Validate inputs: phone (10+ digits after stripping non-digits), email format (if provided), zip (5 digits if provided), first_name required
+4. Insert into `leads` table with forced values: `status='New'`, `source='website'`, `assigned_to=NULL`
+5. Return success/error JSON
+
+This prevents:
+- Spam (Turnstile verification)
+- Data corruption (server forces status/source/assigned_to values)
+- Invalid data (server-side validation)
+
+---
+
+## 6. Real-Time Features
 
 Supabase Realtime subscriptions:
 
-- **Portal leads table** — subscribe to inserts on `leads` table. When a website visitor submits a form, the lead appears instantly in the portal without refresh.
-- **Lead status changes** — team members see updates in real-time when a lead is updated by another team member.
+- **`leads` table** must be added to the Supabase Realtime publication with RLS enabled on the publication
+- **Portal leads view** — subscribe to inserts and updates on `leads` table. New website leads appear instantly. Status changes by team members are reflected in real-time.
+- **Realtime filters** — each portal user subscribes with a filter matching their RLS scope to minimize unnecessary traffic
 
 ---
 
-## 6. Project Structure
+## 7. Project Structure
 
 ```
 legalshieldconsultation/
@@ -212,39 +274,52 @@ legalshieldconsultation/
 │   └── index.html             # Affiliate portal (auth + dashboard)
 ├── js/
 │   ├── supabase-config.js     # Supabase URL + anon key
-│   ├── client-form.js         # Form submission logic for client site
-│   └── portal-app.js          # All portal logic (auth, leads, team, commissions)
+│   ├── client-form.js         # Form submission + Turnstile logic
+│   ├── portal-auth.js         # Login/logout/session management
+│   ├── portal-leads.js        # Lead CRUD, scoring, filtering, realtime
+│   ├── portal-team.js         # Team management, invites, hierarchy
+│   └── portal-commissions.js  # Commission CRUD, stats, overrides
+├── supabase/
+│   ├── migrations/
+│   │   └── 001_initial_schema.sql  # Tables, triggers, RLS policies
+│   └── functions/
+│       └── submit-lead/
+│           └── index.ts       # Edge Function for website form
 ├── vercel.json                # Routing config
 └── package.json               # Project metadata
 ```
 
 ---
 
-## 7. Hosting & Deployment
+## 8. Hosting & Deployment
 
 - **Vercel** (free tier): static file hosting, custom domain `legalshieldconsultation.com`
-- **Supabase** (free tier): PostgreSQL, Auth, Realtime, 500MB database, 50K monthly active users
+- **Supabase** (free tier): PostgreSQL, Auth, Realtime, Edge Functions, 500MB database, 50K monthly active users
 - **Domain:** Point DNS to Vercel, configure custom domain in Vercel dashboard
 - **SSL:** Auto-provisioned by Vercel
 
-### vercel.json
-- Route `/portal` to `/portal/index.html`
-- Route `/js/*` to static JS files
-- Route everything else to `/index.html`
+### vercel.json routing (order matters — specific routes first)
+1. `/portal` and `/portal/` -> `/portal/index.html`
+2. `/js/*` -> static JS files (passthrough)
+3. `/api/submit-lead` -> proxy to Supabase Edge Function (optional, or call Edge Function URL directly from client)
+4. Everything else -> `/index.html`
 
 ---
 
-## 8. Security
+## 9. Security
 
 - Supabase anon key is safe to expose in client-side code (RLS enforces access control)
 - Portal requires authentication — no unauthenticated access to lead data
-- Website form uses anon key with restricted insert-only policy
-- No sensitive keys in client code — all security via RLS policies
+- **Website form submits through Edge Function** (not direct anon insert) — prevents data corruption and abuse
+- **Cloudflare Turnstile** on consultation form prevents bot spam
+- **Input validation** on both client-side and Edge Function
+- No sensitive keys in client code — all security via RLS policies + Edge Function
 - Phone numbers and emails protected behind auth
+- Deactivated users blocked at RLS level
 
 ---
 
-## 9. Out of Scope (Phase 1)
+## 10. Out of Scope (Phase 1)
 
 - Unlimited MLM depth (capped at 3 levels)
 - Auto-distribution / round-robin lead assignment
