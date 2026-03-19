@@ -651,11 +651,19 @@ serve(async (req: Request) => {
     }
 
     const body = await req.json();
-    const { full_name, email, role, parent_id } = body;
+    const { full_name, email, role } = body;
 
     // Validate inputs
     if (!full_name || !email || !role) {
       return new Response(JSON.stringify({ error: 'Name, email, and role are required' }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Validate role is a valid value
+    const validRoles = ['manager', 'caller'];
+    if (!validRoles.includes(role)) {
+      return new Response(JSON.stringify({ error: 'Invalid role. Must be manager or caller.' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -672,12 +680,17 @@ serve(async (req: Request) => {
       });
     }
 
+    // Enforce parent_id server-side:
+    // - Managers: always set parent_id to their own ID (they can only add under themselves)
+    // - Owners: parent_id is the caller's own ID (recruits go under the owner)
+    const enforced_parent_id = callerProfile.id;
+
     // Invite user via admin API
     const { data: inviteData, error: inviteError } = await serviceClient.auth.admin.inviteUserByEmail(email, {
       data: {
         full_name: full_name,
         role: role,
-        parent_id: parent_id,
+        parent_id: enforced_parent_id,
       },
     });
 
