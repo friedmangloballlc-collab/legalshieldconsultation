@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affordable Online Legal Help for All | LegalShield ®</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/client.css">
+</head>
+<body>
+
+<div class="topbar">Questions? Call us at <a href="tel:8337216883">(833) 721-6883</a></div>
+
+<header>
+  <div class="hdr">
+    <a href="#" class="logo">
+      <svg viewBox="0 0 34 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 1.5L2 7V19C2 28.8 8.8 37.6 17 40.2C25.2 37.6 32 28.8 32 19V7L17 1.5Z" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.45)" stroke-width="1.4"/>
+        <path d="M17 6.5L5.5 11.5V20C5.5 27.4 10.5 33.8 17 36.2C23.5 33.8 28.5 27.4 28.5 20V11.5L17 6.5Z" fill="rgba(91,53,200,.28)" stroke="rgba(232,184,0,.65)" stroke-width=".9"/>
+        <path d="M11.5 21.5L15.5 25.5L22.5 17" stroke="#E8B800" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="logotype">LegalShield <span>Consultation</span> <sup style="font-size:.55rem;color:rgba(255,255,255,.5);font-family:Inter,sans-serif;font-weight:400">®</sup></span>
+    </a>
+
+    <nav class="mainnav">
+      <button class="ni">How It Works</button>
+
+      <button class="ni drop">Common Problems
+        <div class="mega">
+          <div class="mega-head">Your Life</div>
+          <div class="mega-cols">
+            <div class="di" onclick="openModal()"><div class="di-ic">📋</div><div><strong>Estate Planning</strong><span>Will, Power of Attorney, Trust</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">💰</div><div><strong>Consumer Finance</strong><span>Billing disputes, audits, more</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">🏘️</div><div><strong>Renters</strong><span>Landlord disputes, lease help</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">🏠</div><div><strong>Real Estate</strong><span>Purchase agreements, HOA matters</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">🔑</div><div><strong>Landlords</strong><span>Problem tenants, drafting a lease</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">👨‍👩‍👧</div><div><strong>Family Law</strong><span>Divorce, custody, prenuptial</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">👔</div><div><strong>Employee Rights</strong><span>Fired, harassed, denied benefits</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">🚗</div><div><strong>Traffic &amp; Accidents</strong><span>Tickets, violations, accidents</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">🚛</div><div><strong>Commercial Drivers</strong><span>CDL legal issues, violations</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">➕</div><div><strong>Add-On Coverage</strong><span>Trial Defense, Gun Owners, Rideshare</span></div></div>
+          </div>
+          <div class="mega-divider"></div>
+          <div class="mega-head">Your Business</div>
+          <div class="mega-cols">
+            <div class="di" onclick="openModal()"><div class="di-ic">💼</div><div><strong>Debt Collection</strong><span>Debt, bankruptcy, and more</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">📜</div><div><strong>Business Licenses</strong><span>Licenses and permits</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">⚖️</div><div><strong>Civil Litigation</strong><span>Starting or defending a lawsuit</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">📄</div><div><strong>Contracts</strong><span>Drafting &amp; enforcing contracts</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">👥</div><div><strong>Employment</strong><span>Hiring/firing, Workers' Comp</span></div></div>
+            <div class="di" onclick="openModal()"><div class="di-ic">💡</div><div><strong>Intellectual Property</strong><span>Trademarks, copyrights, patents</span></div></div>
+          </div>
+        </div>
+      </button>
+
+      <button class="ni drop">Resources
+        <div class="mega mega-res">
+          <div class="mega-head">Learn</div>
+          <div class="res-cols">
+            <div class="di"><div class="di-ic">📝</div><div><strong>Blog</strong><span>Insights, tips, and more</span></div></div>
+            <div class="di"><div class="di-ic">❓</div><div><strong>FAQ</strong><span>Browse our FAQs</span></div></div>
+            <div class="di"><div class="di-ic">📰</div><div><strong>News &amp; Press</strong><span>Breaking legal news</span></div></div>
+            <div class="di"><div class="di-ic">📊</div><div><strong>Consumer Stress Index</strong><span>Legal services demand stats</span></div></div>
+          </div>
+          <div class="mega-divider"></div>
+          <div class="mega-head">Support</div>
+          <div class="res-cols">
+            <div class="di"><div class="di-ic">📞</div><div><strong>Contact Us</strong><span>Reach out anytime</span></div></div>
+            <div class="di"><div class="di-ic">🏛️</div><div><strong>Lawyer Directory</strong><span>22 yrs avg experience</span></div></div>
+            <div class="di"><div class="di-ic">🏢</div><div><strong>Employee Benefits</strong><span>Workplace legal protection</span></div></div>
+          </div>
+        </div>
+      </button>
+
+      <button class="ni" onclick="document.getElementById('plans-sec').scrollIntoView({behavior:'smooth'})">Plans</button>
+    </nav>
+
+    <div class="hdr-right">
+      <a href="https://legal.legalshield.com" class="btn-si">Sign In</a>
+      <a href="#" class="btn-cta" onclick="event.preventDefault();openModal()">Get Protected</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1 class="hero-h1">Real Lawyers, Real Savings,<br>Real Peace of Mind</h1>
+      <p class="hero-sub">Having an experienced lawyer in your corner is life changing. Get legal help starting at around a $1 a day* for an unlimited number of personal and business issues.</p>
+      <div class="hero-btns">
+        <a href="#" class="hbtn-primary" onclick="event.preventDefault();document.getElementById('plans-sec').scrollIntoView({behavior:'smooth'})">Shop plans</a>
+        <a href="#" class="hbtn-sec" onclick="event.preventDefault();document.getElementById('hiw').scrollIntoView({behavior:'smooth'})">Learn more</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-num">4.5M+</div><div class="hstat-lbl">People helped</div></div>
+        <div class="hstat"><div class="hstat-num">22 yrs</div><div class="hstat-lbl">Avg. attorney experience</div></div>
+        <div class="hstat"><div class="hstat-num">~$1/day</div><div class="hstat-lbl">Access to a law firm</div></div>
+      </div>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-grid-cell"><div class="hgc">⚖️</div></div>
+      <div class="hero-grid-cell"><div class="hgc">👨‍👩‍👧</div></div>
+      <div class="hero-grid-cell"><div class="hgc">🏠</div></div>
+      <div class="hero-grid-cell"><div class="hgc">📋</div></div>
+      <div class="hero-grid-cell"><div class="hgc hgc-ls">LS</div></div>
+      <div class="hero-grid-cell"><div class="hgc">🚗</div></div>
+      <div class="hero-grid-cell"><div class="hgc">💼</div></div>
+      <div class="hero-grid-cell"><div class="hgc">🛡️</div></div>
+      <div class="hero-grid-cell"><div class="hgc">👔</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="statsbar">
+  <div class="statsbar-inner">
+    <div class="sb-item"><div class="sb-num">4.5 million</div><div class="sb-lbl">people helped</div></div>
+    <div class="sb-item"><div class="sb-num">$26 million</div><div class="sb-lbl">in savings per year for members</div></div>
+    <div class="sb-item"><div class="sb-num">22 years</div><div class="sb-lbl">lawyers' average experience</div></div>
+    <div class="sb-item"><div class="sb-num">1972</div><div class="sb-lbl">when we reimagined access to lawyers</div></div>
+    <div class="sb-item"><div class="sb-num">~$1/day</div><div class="sb-lbl">for access to a law firm for help</div></div>
+  </div>
+</div>
+
+<!-- PRESS BAR -->
+<div class="pressbar">
+  <div class="pressbar-inner">
+    <span class="press-label">As seen in</span>
+    <span class="press-item">CNBC</span>
+    <span class="press-item">Fortune</span>
+    <span class="press-item">Business Insider</span>
+    <span class="press-item">U.S. News</span>
+    <span class="press-item">Newsweek</span>
+    <span class="press-item">Kiplinger</span>
+    <span class="press-item">MarketWatch</span>
+    <span class="press-item">CBS News</span>
+  </div>
+</div>
+
+<!-- HOW WE HELP -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label">Coverage Areas</div>
+    <div class="sec-title">How We Help</div>
+    <div style="margin-bottom:32px;"></div>
+    <div class="hwh-grid">
+      <div class="hwh-card" onclick="openModal()">
+        <div class="hwh-bg hwh-c1">
+          <div class="hwh-overlay"></div>
+          <div class="hwh-emoji">👨‍👩‍👧</div>
+          <div class="hwh-title">Family Law</div>
+        </div>
+      </div>
+      <div class="hwh-card" onclick="openModal()">
+        <div class="hwh-bg hwh-c2">
+          <div class="hwh-overlay"></div>
+          <div class="hwh-emoji">📋</div>
+          <div class="hwh-title">Estate Planning</div>
+        </div>
+      </div>
+      <div class="hwh-card" onclick="openModal()">
+        <div class="hwh-bg hwh-c3">
+          <div class="hwh-overlay"></div>
+          <div class="hwh-emoji">🏠</div>
+          <div class="hwh-title">Real Estate</div>
+        </div>
+      </div>
+      <div class="hwh-card" onclick="openModal()">
+        <div class="hwh-bg hwh-c4">
+          <div class="hwh-overlay"></div>
+          <div class="hwh-emoji">🚗</div>
+          <div class="hwh-title">Traffic &amp; Accident</div>
+        </div>
+      </div>
+      <div class="hwh-card" onclick="openModal()">
+        <div class="hwh-bg hwh-c5">
+          <div class="hwh-overlay"></div>
+          <div class="hwh-emoji">💰</div>
+          <div class="hwh-title">Consumer Finance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec sec-alt" id="hiw">
+  <div class="sec-inner">
+    <div class="sec-label">Simple Process</div>
+    <div class="sec-title">How It Works</div>
+    <div class="sec-sub">We don't do the expensive billable hour thing*. For a small fee, you get a law firm on your side. Simply:</div>
+    <div class="hiw-grid">
+      <div class="hiw-card">
+        <div class="hiw-num">01</div>
+        <div class="hiw-img">🗣️</div>
+        <div class="hiw-title">Tell us about the help you need</div>
+        <div class="hiw-desc">Use the app or your computer to describe your legal issue. Our system connects you instantly to the right attorney.</div>
+      </div>
+      <div class="hiw-card">
+        <div class="hiw-num">02</div>
+        <div class="hiw-img">🏛️</div>
+        <div class="hiw-title">Connect with provider law firm</div>
+        <div class="hiw-desc">You're matched with a dedicated law firm in your state — real attorneys with an average of 22 years of experience.</div>
+      </div>
+      <div class="hiw-card">
+        <div class="hiw-num">03</div>
+        <div class="hiw-img">📞</div>
+        <div class="hiw-title">Get the legal help you need</div>
+        <div class="hiw-desc">Call your law firm directly, anytime. Consultations, document reviews, letters on your behalf — all covered.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="sec" id="plans-sec">
+  <div class="sec-inner">
+    <div class="sec-label">Membership Plans</div>
+    <div class="sec-title">Simple, Affordable Legal Protection</div>
+    <div class="sec-sub">Instead of paying $200+/hour, pay a flat monthly fee and access a real law firm whenever you need it.</div>
+
+    <div class="plans-toggle">
+      <div class="ptab active" onclick="switchPlans('personal',this)">Personal Plans</div>
+      <div class="ptab" onclick="switchPlans('business',this)">Small Business Plans</div>
+    </div>
+
+    <div class="plans-wrap active" id="personal-plans">
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-name">Personal Plan</div>
+          <div class="pc-price"><sup>$</sup>35<sub>.95/mo</sub></div>
+          <div class="pc-sub">Individuals &amp; families</div>
+        </div>
+        <div class="pc-body">
+          <div class="pf">Unlimited personal legal consultations</div>
+          <div class="pf">Will, living will &amp; power of attorney prep</div>
+          <div class="pf">Document review (10/yr, up to 15 pages)</div>
+          <div class="pf">Letters &amp; calls made on your behalf</div>
+          <div class="pf">Traffic ticket assistance</div>
+          <div class="pf">IRS audit assistance</div>
+          <div class="pf">24/7 emergency access</div>
+          <div class="pf">Covers your whole family</div>
+          <div class="pf">25% discount on outside services</div>
+        </div>
+        <a href="#" class="pc-btn" onclick="event.preventDefault();openModal()">Get Started</a>
+      </div>
+      <div class="pc feat">
+        <div class="pc-top">
+          <div class="pc-badge">Most Popular</div>
+          <div class="pc-name">Personal + Home Business</div>
+          <div class="pc-price"><sup>$</sup>59<sub>/mo approx.</sub></div>
+          <div class="pc-sub">Personal Plan + Home Business Supplement</div>
+        </div>
+        <div class="pc-body">
+          <div class="pf">Everything in Personal Plan</div>
+          <div class="pf">Unlimited business consultations</div>
+          <div class="pf">4 contract/document reviews per month</div>
+          <div class="pf">IRS audit services for home business</div>
+          <div class="pf">Business debt collection letters</div>
+          <div class="pf">Ideal for freelancers &amp; side hustles</div>
+        </div>
+        <a href="#" class="pc-btn" onclick="event.preventDefault();openModal()">Get Started</a>
+      </div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-name">Personal + Trial Defense</div>
+          <div class="pc-price"><sup>$</sup>54<sub>/mo approx.</sub></div>
+          <div class="pc-sub">Personal Plan + Trial Defense Supplement</div>
+        </div>
+        <div class="pc-body">
+          <div class="pf">Everything in Personal Plan</div>
+          <div class="pf">Pre-trial preparation hours</div>
+          <div class="pf">Trial defense representation hours</div>
+          <div class="pf">Civil trial court coverage</div>
+          <div class="pf">Best for maximum legal protection</div>
+        </div>
+        <a href="#" class="pc-btn" onclick="event.preventDefault();openModal()">Get Started</a>
+      </div>
+    </div>
+
+    <div class="plans-wrap" id="business-plans">
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-name">Small Business Essentials</div>
+          <div class="pc-price"><sup>$</sup>49<sub>/mo</sub></div>
+          <div class="pc-sub">For small businesses getting started</div>
+        </div>
+        <div class="pc-body">
+          <div class="pf">Unlimited advice &amp; consultation</div>
+          <div class="pf">10 document reviews/yr (15 pages)</div>
+          <div class="pf">10 letters or calls/yr (3/month max)</div>
+          <div class="pf">5 debt collection letters/month</div>
+          <div class="pf">2 designated users</div>
+          <div class="pf">25% member discount</div>
+          <div class="pf no">IRS audit services</div>
+          <div class="pf no">Interstate services</div>
+        </div>
+        <a href="#" class="pc-btn" onclick="event.preventDefault();openModal()">Get Started</a>
+      </div>
+      <div class="pc feat">
+        <div class="pc-top">
+          <div class="pc-badge">Best Value</div>
+          <div class="pc-name">Small Business Plus</div>
+          <div class="pc-price"><sup>$</sup>99<sub>/mo</sub></div>
+          <div class="pc-sub">For growing small businesses</div>
+        </div>
+        <div class="pc-body">
+          <div class="pf">Everything in Essentials</div>
+          <div class="pf">20 document reviews/yr (20 pages)</div>
+          <div class="pf">20 letters or calls/yr (5/month max)</div>
+          <div class="pf">10 debt collection letters/month</div>
+          <div class="pf">IRS audit legal services (25 hrs)</div>
+          <div class="pf">Flat-fee services included</div>
+          <div class="pf no">Interstate services</div>
+        </div>
+        <a href="#" class="pc-btn" onclick="event.preventDefault();openModal()">Get Started</a>
+      </div>
+      <div class="pc">
+        <div class="pc-top">
+          <div class="pc-name">Small Business Pro</div>
+          <div class="pc-price"><sup>$</sup>169<sub>/mo</sub></div>
+          <div class="pc-sub">For established businesses</div>
+        </div>
+        <div class="pc-body">
+          <div class="pf">Everything in Plus</div>
+          <div class="pf">40 document reviews/yr (25 pages)</div>
+          <div class="pf">40 letters or calls/yr (10/month max)</div>
+          <div class="pf">15 debt collection letters/month</div>
+          <div class="pf">IRS audit legal services (50 hrs)</div>
+          <div class="pf">Interstate legal services included</div>
+        </div>
+        <a href="#" class="pc-btn" onclick="event.preventDefault();openModal()">Get Started</a>
+      </div>
+    </div>
+    <p class="plans-footnote">* See your plan contract for details. Additional fees, limitations, and waiting periods may apply.</p>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section class="sec sec-alt">
+  <div class="sec-inner">
+    <div class="sec-label">What's Covered</div>
+    <div class="sec-title">Legal Help for Every Situation</div>
+    <div class="sec-sub">From everyday questions to serious legal matters — your provider law firm handles it all.</div>
+    <div class="cov-grid">
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">📋</div><div class="cov-title">Estate Planning</div><div class="cov-desc">Will, living will, power of attorney, trusts</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">🏠</div><div class="cov-title">Real Estate</div><div class="cov-desc">Purchase agreements, HOA, landlord issues</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">👨‍👩‍👧</div><div class="cov-title">Family Law</div><div class="cov-desc">Divorce, custody, child support, prenups</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">🚗</div><div class="cov-title">Traffic &amp; Accidents</div><div class="cov-desc">Speeding tickets, violations, accidents</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">👔</div><div class="cov-title">Employee Rights</div><div class="cov-desc">Wrongful termination, workplace harassment</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">💰</div><div class="cov-title">Consumer Finance</div><div class="cov-desc">Billing disputes, IRS audits, contractors</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">🏢</div><div class="cov-title">Small Business</div><div class="cov-desc">Contracts, debt collection, compliance</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">🔒</div><div class="cov-title">Identity Theft</div><div class="cov-desc">Restoration, monitoring, protection</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">📄</div><div class="cov-title">Contracts</div><div class="cov-desc">Review, drafting, enforcement</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">⚖️</div><div class="cov-title">Civil Litigation</div><div class="cov-desc">Start or defend a lawsuit</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">🔑</div><div class="cov-title">Landlords</div><div class="cov-desc">Problem tenants, lease drafting</div></div>
+      <div class="cov-card" onclick="openModal()"><div class="cov-em">💡</div><div class="cov-title">Intellectual Property</div><div class="cov-desc">Trademarks, copyrights, patents</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label">Member Stories</div>
+    <div class="sec-title">What Our Members Say</div>
+    <div class="sec-sub">Real people. Real results. Over 4.5 million people have experienced the LegalShield difference.</div>
+    <div class="test-grid">
+      <div class="tc">
+        <div class="tc-stars">★★★★★</div>
+        <div class="tc-text">"LegalShield provides prompt, prudent service. Their rates are wonderful and something pretty much unheard of in this day and age. They assisted me with a financial situation that probably would have cost me $1,000 in outside legal fees."</div>
+        <div class="tc-aut">
+          <div class="tc-av">MR</div>
+          <div><div class="tc-name">Marcus R.</div><div class="tc-plan">Personal Plan Member</div></div>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="tc-stars">★★★★★</div>
+        <div class="tc-text">"My provider lawyer made the process of fighting my daughter's ticket very simple, and the steps were easy to follow. I would recommend them 100%. Worth every penny of the membership."</div>
+        <div class="tc-aut">
+          <div class="tc-av">TJ</div>
+          <div><div class="tc-name">Tanya J.</div><div class="tc-plan">Personal Plan Member</div></div>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="tc-stars">★★★★★</div>
+        <div class="tc-text">"I have used LegalShield over the years for what may seem like small issues, but they are really important to me. I appreciate having access to a qualified provider lawyer in the area I need, exactly when I need it."</div>
+        <div class="tc-aut">
+          <div class="tc-av">KS</div>
+          <div><div class="tc-name">Kevin S.</div><div class="tc-plan">Home Business Member</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec sec-alt">
+  <div class="sec-inner">
+    <div class="sec-label">Frequently Asked Questions</div>
+    <div class="sec-title">Got Questions? We've Got Answers.</div>
+    <div style="margin-bottom:28px;"></div>
+    <div class="faq-list">
+      <div class="fq">
+        <div class="fq-q" onclick="tfq(this)">How much does LegalShield cost?<span class="fq-chev">▾</span></div>
+        <div class="fq-a">Personal plans start at $35.95/month — just over $1 per day. Small Business plans start at $49/month. Both include access to a dedicated law firm with no hourly fees or retainers.</div>
+      </div>
+      <div class="fq">
+        <div class="fq-q" onclick="tfq(this)">Does LegalShield cover my whole family?<span class="fq-chev">▾</span></div>
+        <div class="fq-a">Yes! The Personal Plan covers you, your spouse, and your dependents — all under the same flat monthly rate. Every member of your household can call your provider law firm for help.</div>
+      </div>
+      <div class="fq">
+        <div class="fq-q" onclick="tfq(this)">Can I cancel my membership anytime?<span class="fq-chev">▾</span></div>
+        <div class="fq-a">Yes. LegalShield is a pre-paid monthly subscription and members can cancel at any time. Cancellations must be submitted in writing by emailing memberservices@legalshield.com. Annual memberships can be cancelled after the first 12 months.</div>
+      </div>
+      <div class="fq">
+        <div class="fq-q" onclick="tfq(this)">What if I have a legal issue that started before joining?<span class="fq-chev">▾</span></div>
+        <div class="fq-a">Most pre-existing situations can receive a consultation and a discount from the provider law firm. Some exclusions apply — for example, civil actions or IRS notices received before your membership start date may not receive full coverage, but you'll still get legal advice and a 25% discount on further services.</div>
+      </div>
+      <div class="fq">
+        <div class="fq-q" onclick="tfq(this)">How is LegalShield different from LegalZoom?<span class="fq-chev">▾</span></div>
+        <div class="fq-a">LegalZoom primarily offers document templates you fill out yourself. LegalShield connects you with a real human attorney in your state who provides actual legal advice, answers your questions, reviews your documents, and can represent you. It's the difference between a form and a lawyer.</div>
+      </div>
+      <div class="fq">
+        <div class="fq-q" onclick="tfq(this)">Are these real lawyers or a call center?<span class="fq-chev">▾</span></div>
+        <div class="fq-a">Real law firms. LegalShield has a network of nearly 40 vetted provider law firms and over 900 attorneys across the US and Canada, with an average of 22 years of experience. You're assigned to a dedicated firm in your state — not a generic hotline.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="ctaband">
+  <h2>Get Legal Protection Today</h2>
+  <p>Join over 4.5 million people who have access to a real law firm whenever they need it — for around $1 a day.*</p>
+  <div class="ctaband-btns">
+    <a href="#" class="hbtn-primary" onclick="event.preventDefault();openModal()">Shop plans</a>
+    <a href="tel:8337216883" class="hbtn-sec ctaband-phone">📞 (833) 721-6883</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <a href="#" class="logo">
+          <svg width="26" height="30" viewBox="0 0 34 40" fill="none">
+            <path d="M17 1.5L2 7V19C2 28.8 8.8 37.6 17 40.2C25.2 37.6 32 28.8 32 19V7L17 1.5Z" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.35)" stroke-width="1.3"/>
+            <path d="M11.5 21.5L15.5 25.5L22.5 17" stroke="#E8B800" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="ft-brand-name">LegalShield <span>Consultation</span></span>
+        </a>
+        <p>Providing affordable legal services to individuals, families, and small businesses across the US and Canada since 1972.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Plans</h4>
+        <a href="#">Personal Plan</a>
+        <a href="#">Home Business</a>
+        <a href="#">Small Business</a>
+        <a href="#">Supplements</a>
+        <a href="#">IDShield</a>
+      </div>
+      <div class="ft-col">
+        <h4>Legal Help</h4>
+        <a href="#">Estate Planning</a>
+        <a href="#">Family Law</a>
+        <a href="#">Real Estate</a>
+        <a href="#">Traffic Tickets</a>
+        <a href="#">Employee Rights</a>
+        <a href="#">Business Contracts</a>
+      </div>
+      <div class="ft-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQ</a>
+        <a href="#">Law Firm Finder</a>
+        <a href="https://legal.legalshield.com">Member Login</a>
+        <a href="tel:8337216883">(833) 721-6883</a>
+      </div>
+    </div>
+    <div class="ft-disc">* See your plan contract for details. Additional fees, limitations, and waiting periods may apply. LegalShield provides access to legal services offered by a network of provider law firms. LegalShield is not a law firm and does not provide legal advice or services directly.</div>
+    <div class="ft-bottom">
+      <span>© 2025 Pre-Paid Legal Services, Inc. d/b/a LegalShield. All rights reserved.</span>
+      <div class="ft-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- STICKY MOBILE CTA -->
+<div class="sticky-cta">
+  <a href="#" onclick="event.preventDefault();openModal()">Get Legal Protection — from $35.95/mo →</a>
+</div>
+
+<!-- CONSULTATION MODAL -->
+<div class="overlay" id="modal-overlay">
+  <div class="modal modal-wrap">
+    <button class="btn-close-x" onclick="closeModal()">×</button>
+    <div id="mform">
+      <h3>Get Your Free Consultation</h3>
+      <p>Fill out your info and a representative will reach out within 24 hours to walk you through the best plan for your needs.</p>
+      <div class="frow">
+        <div class="fg"><label>First Name</label><input type="text" id="f-fn" placeholder="John"></div>
+        <div class="fg"><label>Last Name</label><input type="text" id="f-ln" placeholder="Smith"></div>
+      </div>
+      <div class="fg"><label>Phone Number *</label><input type="tel" id="f-ph" placeholder="(555) 000-0000"></div>
+      <div class="fg"><label>Email Address</label><input type="email" id="f-em" placeholder="john@email.com"></div>
+      <div class="fg"><label>ZIP Code</label><input type="text" id="f-zip" placeholder="33101" maxlength="5"></div>
+      <div class="fg">
+        <label>I'm interested in...</label>
+        <select id="f-int">
+          <option value="">Select a plan</option>
+          <option>Personal / Family Plan – $35.95/mo</option>
+          <option>Personal + Home Business – ~$59/mo</option>
+          <option>Personal + Trial Defense – ~$54/mo</option>
+          <option>Small Business Essentials – $49/mo</option>
+          <option>Small Business Plus – $99/mo</option>
+          <option>Small Business Pro – $169/mo</option>
+          <option>Not sure — need guidance</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Best time to call</label>
+        <select id="f-time">
+          <option value="">Select</option>
+          <option>Morning (8am–12pm)</option>
+          <option>Afternoon (12pm–5pm)</option>
+          <option>Evening (5pm–8pm)</option>
+        </select>
+      </div>
+      <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-callback="onTurnstileSuccess"></div>
+      <button class="btn-submit" id="btn-submit-form">Request My Free Consultation →</button>
+    </div>
+    <div class="success" id="msuccess">
+      <div class="ck">✓</div>
+      <h4>You're All Set!</h4>
+      <p>Thank you! A licensed representative will reach out within 24 hours to walk you through your best plan options.</p>
+      <button class="btn-submit" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/client-form.js"></script>
+</body>
+</html>
