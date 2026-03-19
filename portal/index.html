@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalShield Affiliate Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/portal.css">
+</head>
+<body>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg viewBox="0 0 34 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 1.5L2 7V19C2 28.8 8.8 37.6 17 40.2C25.2 37.6 32 28.8 32 19V7L17 1.5Z" fill="rgba(75,45,150,.15)" stroke="rgba(75,45,150,.5)" stroke-width="1.4"/>
+        <path d="M11.5 21.5L15.5 25.5L22.5 17" stroke="#D4A820" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>LegalShield Portal</h1>
+    </div>
+    <h2>Affiliate Sign In</h2>
+    <p>Enter your credentials to access the portal</p>
+    <form onsubmit="handleLogin(event)">
+      <div class="fg"><label>Email</label><input type="email" id="login-email" placeholder="you@email.com" required></div>
+      <div class="fg"><label>Password</label><input type="password" id="login-password" placeholder="Your password" required></div>
+      <button type="submit" class="login-btn">Sign In</button>
+    </form>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ═══ PORTAL APP ═══ -->
+<div id="portal-app" style="display:none">
+
+<header>
+  <div class="hdr">
+    <div class="logo-area">
+      <svg viewBox="0 0 34 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 1.5L2 7V19C2 28.8 8.8 37.6 17 40.2C25.2 37.6 32 28.8 32 19V7L17 1.5Z" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.4)" stroke-width="1.4"/>
+        <path d="M11.5 21.5L15.5 25.5L22.5 17" stroke="#F5D060" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="logotxt">
+        <h1>LegalShield Consultation</h1>
+        <p>Affiliate Representative Portal</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <span id="user-name" class="user-name"></span>
+      <span class="abadge" id="user-role"></span>
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+  </div>
+  <nav>
+    <button class="nt active" data-sec="dashboard" onclick="showSec('dashboard',this)">📊 Dashboard</button>
+    <button class="nt" data-sec="leads" onclick="showSec('leads',this)">🔥 Warm Leads <span class="nb" id="new-badge" style="display:none">0</span></button>
+    <button class="nt" data-sec="commission" onclick="showSec('commission',this)">💵 Commissions</button>
+    <button class="nt" data-sec="team" onclick="showSec('team',this)">👥 Team</button>
+    <button class="nt" data-sec="plans" onclick="showSec('plans',this)">📋 Plans</button>
+    <button class="nt" data-sec="script" onclick="showSec('script',this)">📞 Script</button>
+    <button class="nt" data-sec="faq" onclick="showSec('faq',this)">💬 FAQs</button>
+    <button class="nt" data-sec="quick" onclick="showSec('quick',this)">⚡ Quick Ref</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashboard" class="sec active">
+  <div class="stitle">Dashboard</div>
+  <div class="ssub">Overview of your leads, team, and performance.</div>
+  <div class="srow">
+    <div class="sc hl"><div class="n" id="dash-new">0</div><div class="l">New Leads</div></div>
+    <div class="sc"><div class="n" id="dash-total">0</div><div class="l">Total Leads</div></div>
+    <div class="sc"><div class="n" id="dash-enrolled">0</div><div class="l">Enrolled</div></div>
+    <div class="sc"><div class="n" id="dash-followup">0</div><div class="l">Follow-Up Due</div></div>
+    <div class="sc"><div class="n" id="dash-team">0</div><div class="l">Team Members</div></div>
+  </div>
+  <div class="dash-grid">
+    <div class="card">
+      <div class="ctitle"><div class="icb">📊</div> Recent Activity</div>
+      <div class="activity-feed" id="activity-feed"><div class="empty"><p>No recent activity.</p></div></div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><div class="icb">🏆</div> My Performance</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:10px 0">
+        <div class="perf-card"><div class="perf-num" id="dash-my-enrollments">0</div><div class="perf-label">Enrollments This Month</div></div>
+        <div class="perf-card"><div class="perf-num" id="dash-my-commission">$0</div><div class="perf-label">Commission This Month</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="addbtn" onclick="showSec('leads',document.querySelector('[data-sec=leads]'));openAddModal()">+ Add Lead</button>
+        <button class="addbtn" style="background:#3b82f6" onclick="showSec('team',document.querySelector('[data-sec=team]'));openInviteModal()">+ Invite Member</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WARM LEADS ═══ -->
+<div id="leads" class="sec">
+  <div class="stitle">Warm Leads</div>
+  <div class="ssub">Clients who requested a consultation from your website. Sorted by score — hottest leads first.</div>
+
+  <div class="srow" id="stats-row">
+    <div class="sc hl"><div class="n" id="sn">0</div><div class="l">New Leads</div></div>
+    <div class="sc"><div class="n" id="st">0</div><div class="l">Total Leads</div></div>
+    <div class="sc"><div class="n" id="se">0</div><div class="l">Enrolled</div></div>
+    <div class="sc"><div class="n" id="sc2">0</div><div class="l">Contacted</div></div>
+    <div class="sc"><div class="n" id="sr">0</div><div class="l">Follow-Up Due</div></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="tbL">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-inp" placeholder="Search name, phone, email…" oninput="renderLeads()">
+      </div>
+      <button class="fb active" onclick="setFilter('all',this)">All</button>
+      <button class="fb" onclick="setFilter('New',this)">🆕 New</button>
+      <button class="fb" onclick="setFilter('Called',this)">📞 Called</button>
+      <button class="fb" onclick="setFilter('Follow-Up',this)">🔁 Follow-Up</button>
+      <button class="fb" onclick="setFilter('Enrolled',this)">✅ Enrolled</button>
+      <button class="fb" onclick="setFilter('Not Interested',this)">❌ No</button>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="addbtn" style="background:#3b82f6" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="addbtn" onclick="openAddModal()">+ Add Lead</button>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr>
+        <th>Score</th><th>Name</th><th>Phone</th><th>Email / ZIP</th>
+        <th>Interest</th><th>Call Time</th><th>Added</th><th>Reminder</th>
+        <th>Assigned To</th><th>Status</th><th>Actions</th>
+      </tr></thead>
+      <tbody id="leads-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ COMMISSION ═══ -->
+<div id="commission" class="sec">
+  <div class="stitle">Commission Tracker</div>
+  <div class="ssub">Log enrollments and track your estimated earnings per plan type.</div>
+
+  <div class="comm-grid" id="comm-stats">
+    <div class="comm-card"><h4>💰 Total Earnings Est.</h4><div class="cn" id="total-earn">$0</div><div class="cs">All time</div></div>
+    <div class="comm-card" style="background:linear-gradient(135deg,#065f46,#059669)"><h4>📅 This Month</h4><div class="cn" id="month-earn">$0</div><div class="cs" id="month-lbl">No enrollments yet</div></div>
+    <div class="comm-card" style="background:linear-gradient(135deg,#7c2d12,#c2410c)"><h4>👥 Total Enrolled</h4><div class="cn" id="total-enr">0</div><div class="cs">Members enrolled</div></div>
+    <div class="comm-card" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)"><h4>⭐ Avg. Plan Value</h4><div class="cn" id="avg-plan">$0</div><div class="cs">Per enrollment</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><div class="icb">💡</div> Commission Rate Guide</div>
+    <div style="overflow-x:auto">
+      <table class="comm-table">
+        <thead><tr><th>Plan</th><th>Monthly Fee</th><th>Est. Commission*</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="comm-plan">Personal Plan</td><td>$35.95/mo</td><td class="comm-rate">~$45 signup</td><td style="font-size:.78rem;color:var(--tl)">+ residual per active member</td></tr>
+          <tr><td class="comm-plan">Personal + Home Business</td><td>~$59/mo</td><td class="comm-rate">~$70 signup</td><td style="font-size:.78rem;color:var(--tl)">Higher residual value</td></tr>
+          <tr><td class="comm-plan">Personal + Trial Defense</td><td>~$54/mo</td><td class="comm-rate">~$65 signup</td><td style="font-size:.78rem;color:var(--tl)">Good add-on upsell</td></tr>
+          <tr><td class="comm-plan">SB Essentials</td><td>$49/mo</td><td class="comm-rate">~$65 signup</td><td style="font-size:.78rem;color:var(--tl)">Business accounts retain longer</td></tr>
+          <tr><td class="comm-plan">SB Plus</td><td>$99/mo</td><td class="comm-rate">~$125 signup</td><td style="font-size:.78rem;color:var(--tl)">Higher value, higher commission</td></tr>
+          <tr><td class="comm-plan">SB Pro</td><td>$169/mo</td><td class="comm-rate">~$210 signup</td><td style="font-size:.78rem;color:var(--tl)">Best single-enrollment value</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.72rem;color:var(--tl);margin-top:10px">* Estimated commissions — verify exact rates with your LegalShield associate agreement.</p>
+  </div>
+
+  <div class="card">
+    <div class="ctitle" style="justify-content:space-between">
+      <span><div class="icb" style="display:inline-flex;margin-right:8px">📝</div> Enrollment Log</span>
+      <button class="add-comm-btn" onclick="openCommAdd()">+ Log Enrollment</button>
+    </div>
+    <div class="tw" style="border:none;border-radius:0">
+      <table class="comm-table" id="comm-table">
+        <thead><tr><th>Date</th><th>Member Name</th><th>Plan</th><th>Monthly Fee</th><th>Est. Commission</th><th>Linked Lead</th><th>Notes</th><th></th></tr></thead>
+        <tbody id="comm-body"><tr><td colspan="8"><div class="empty"><div class="big">💵</div><p>No enrollments logged yet.</p></div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TEAM MANAGEMENT ═══ -->
+<div id="team" class="sec">
+  <div class="stitle">Team Management</div>
+  <div class="ssub">Manage your team hierarchy, invite members, track performance.</div>
+  <div class="toolbar">
+    <div class="tbL"><span style="font-weight:600;color:var(--pd)">Team Hierarchy</span></div>
+    <button class="addbtn" onclick="openInviteModal()">+ Invite Member</button>
+  </div>
+  <div class="team-tree" id="team-tree"></div>
+  <div class="card" style="margin-top:20px">
+    <div class="ctitle"><div class="icb">📈</div> Performance Table</div>
+    <div class="tw" style="border:none;border-radius:0">
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Leads</th><th>Enrollments</th><th>Last Active</th><th>Actions</th></tr></thead>
+        <tbody id="perf-body"><tr><td colspan="7"><div class="empty"><p>No team members yet.</p></div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PLANS & PRICING ═══ -->
+<div id="plans" class="sec">
+  <div class="stitle">Plans & Pricing</div>
+  <div class="ssub">Reference during calls. Toggle between Personal and Business.</div>
+  <div class="pill-tabs">
+    <button class="pt active" onclick="showPortalPlans('pp',this)">👤 Personal</button>
+    <button class="pt" onclick="showPortalPlans('bp',this)">🏢 Small Business</button>
+  </div>
+  <div id="pp" class="psec active">
+    <div class="hl-box"><strong>Personal Plan from $35.95/mo</strong> — Covers individuals &amp; families. Lawyers avg 22 years experience. 24/7/365 access. Family covered.</div>
+    <div class="pgrid">
+      <div class="pcard">
+        <div class="phdr"><div class="pname">Personal Plan</div><div class="pprice">$35.95<span>/mo</span></div></div>
+        <div class="pbody">
+          <div class="pf">Unlimited personal consultations</div>
+          <div class="pf">Will, living will, power of attorney</div>
+          <div class="pf">Document review (10/yr, 15 pg)</div>
+          <div class="pf">Letters &amp; calls on your behalf</div>
+          <div class="pf">Traffic ticket assistance</div>
+          <div class="pf">IRS audit assistance</div>
+          <div class="pf">24/7 emergency access</div>
+          <div class="pf">Family coverage included</div>
+          <div class="pf">25% discount on outside services</div>
+        </div>
+      </div>
+      <div class="pcard feat">
+        <div class="phdr"><div class="bv">Most Popular</div><div class="pname">+ Home Business</div><div class="pprice">~$59<span>/mo</span></div></div>
+        <div class="pbody">
+          <div class="pf">Everything in Personal</div>
+          <div class="pf">Unlimited business consultations</div>
+          <div class="pf">4 contract reviews/month</div>
+          <div class="pf">IRS audit for home business</div>
+          <div class="pf">Business debt collection letters</div>
+          <div class="pf">Best for freelancers &amp; side hustles</div>
+        </div>
+      </div>
+      <div class="pcard">
+        <div class="phdr"><div class="pname">+ Trial Defense</div><div class="pprice">~$54<span>/mo</span></div></div>
+        <div class="pbody">
+          <div class="pf">Everything in Personal</div>
+          <div class="pf">Pre-trial preparation hours</div>
+          <div class="pf">Trial defense representation</div>
+          <div class="pf">Civil trial court coverage</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><div class="icb">➕</div> Add-On Supplements</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px">
+        <div style="background:var(--pp);border-radius:9px;padding:12px"><div style="font-weight:600;color:var(--pd);font-size:.83rem;margin-bottom:3px">🔫 Gun Owner</div><div style="font-size:.77rem;color:var(--tm)">Firearm legal protection + NFA Trust $250 flat</div></div>
+        <div style="background:var(--pp);border-radius:9px;padding:12px"><div style="font-weight:600;color:var(--pd);font-size:.83rem;margin-bottom:3px">🚗 Rideshare/Delivery</div><div style="font-size:.77rem;color:var(--tm)">Moving violations, accidents, rideshare IRS</div></div>
+        <div style="background:var(--pp);border-radius:9px;padding:12px"><div style="font-weight:600;color:var(--pd);font-size:.83rem;margin-bottom:3px">🆔 IDShield</div><div style="font-size:.77rem;color:var(--tm)">Identity theft monitoring &amp; restoration</div></div>
+      </div>
+    </div>
+  </div>
+  <div id="bp" class="psec">
+    <div class="hl-box"><strong>Small Business Plans</strong> — Dedicated law firm for your business. Covers advice, document reviews, debt collection, IRS audits &amp; more.</div>
+    <div class="pgrid">
+      <div class="pcard">
+        <div class="phdr"><div class="pname">Essentials</div><div class="pprice">$49<span>/mo</span></div></div>
+        <div class="pbody">
+          <div class="pf">Unlimited advice &amp; consultation</div>
+          <div class="pf">10 doc reviews/yr (15 pg)</div>
+          <div class="pf">10 letters/calls/yr</div>
+          <div class="pf">5 debt collection letters/mo</div>
+          <div class="pf">2 designated users</div>
+          <div class="pf no">IRS audit services</div>
+          <div class="pf no">Interstate services</div>
+        </div>
+      </div>
+      <div class="pcard feat">
+        <div class="phdr"><div class="bv">Best Value</div><div class="pname">Plus</div><div class="pprice">$99<span>/mo</span></div></div>
+        <div class="pbody">
+          <div class="pf">Everything in Essentials</div>
+          <div class="pf">20 doc reviews/yr (20 pg)</div>
+          <div class="pf">IRS audit services (25 hrs)</div>
+          <div class="pf">10 debt collection letters/mo</div>
+          <div class="pf">Flat-fee services</div>
+          <div class="pf no">Interstate services</div>
+        </div>
+      </div>
+      <div class="pcard">
+        <div class="phdr"><div class="pname">Pro</div><div class="pprice">$169<span>/mo</span></div></div>
+        <div class="pbody">
+          <div class="pf">Everything in Plus</div>
+          <div class="pf">40 doc reviews/yr (25 pg)</div>
+          <div class="pf">IRS audit (50 hrs)</div>
+          <div class="pf">15 debt collection letters/mo</div>
+          <div class="pf">Interstate services included</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CALL SCRIPT ═══ -->
+<div id="script" class="sec">
+  <div class="stitle">Call Script</div>
+  <div class="ssub">Expand each step for word-for-word talking points. Use this during every call.</div>
+  <div class="sstep open">
+    <div class="sshdr" onclick="toggleScriptStep(this)"><div class="ssnum">1</div><div class="sslbl">Opening &amp; Introduction</div><div class="sschev">▼</div></div>
+    <div class="ssbody">
+      <div class="sline">"Hi [Name], my name is [Your Name] and I'm calling as a representative with LegalShield. Do you have just a couple of minutes? I'd love to share something that could save you a lot of money and stress when it comes to legal matters."</div>
+      <div class="tip">💡 <div>Keep it warm and conversational. Lead with the problem, not the price. Most people have dealt with a legal situation they didn't know how to handle.</div></div>
+    </div>
+  </div>
+  <div class="sstep">
+    <div class="sshdr" onclick="toggleScriptStep(this)"><div class="ssnum">2</div><div class="sslbl">Discovery — Find Their Pain Point</div><div class="sschev">▼</div></div>
+    <div class="ssbody">
+      <div class="sline">"Quick question — have you or anyone in your family ever been in a situation where you needed legal help — a lease issue, a speeding ticket, a business contract, or you just didn't know your rights... but felt like you couldn't afford a lawyer?"</div>
+      <div class="tip">💡 <div>Let them talk. Their pain point is your pitch angle. Common triggers: landlord disputes, traffic tickets, business contracts, estate planning.</div></div>
+    </div>
+  </div>
+  <div class="sstep">
+    <div class="sshdr" onclick="toggleScriptStep(this)"><div class="ssnum">3</div><div class="sslbl">Present the Solution</div><div class="sschev">▼</div></div>
+    <div class="ssbody">
+      <div class="sline">"That's exactly what LegalShield fixes. For less than a dollar a day — starting at just $35.95 a month — you get access to a real law firm in your state with lawyers averaging 22 years of experience. No hourly fees. No retainers."</div>
+      <div class="sline">"It's like having a lawyer in the family. They'll review documents, write letters on your behalf, help with your will, deal with IRS issues — and if you ever get in a real legal situation, they've got your back."</div>
+      <div class="tip">💡 <div><strong>Key phrases:</strong> "Less than $1/day" — "Real law firm, not a call center" — "22 years average experience" — "Available 24/7"</div></div>
+    </div>
+  </div>
+  <div class="sstep">
+    <div class="sshdr" onclick="toggleScriptStep(this)"><div class="ssnum">4</div><div class="sslbl">Match to the Right Plan</div><div class="sschev">▼</div></div>
+    <div class="ssbody">
+      <div class="sline">"Based on what you've shared, the [Plan Name] would be the perfect fit. For just $[XX] a month, you'd get [highlight 2–3 features relevant to their situation]."</div>
+      <div class="tip">💡 <div><strong>Match rules:</strong> Side hustle/freelancer → + Home Business. Rideshare driver → + Rideshare Add-On. Business owner → Small Business Essentials/Plus. Concerned about lawsuits → + Trial Defense.</div></div>
+    </div>
+  </div>
+  <div class="sstep">
+    <div class="sshdr" onclick="toggleScriptStep(this)"><div class="ssnum">5</div><div class="sslbl">Handle Hesitation &amp; Close</div><div class="sschev">▼</div></div>
+    <div class="ssbody">
+      <div class="sline">"I totally understand. But here's what I always tell people — legal issues don't wait for a convenient time. Most members say they got their money's worth the very first time they called. And you can cancel in writing any time."</div>
+      <div class="sline">"Can I get you set up today? It only takes a few minutes and you'll have access right away."</div>
+      <div class="tip">💡 <div>Emphasize low risk: monthly subscription, cancel anytime. Remind them $200+/hr for one outside attorney call vs. this flat fee.</div></div>
+    </div>
+  </div>
+  <div class="sstep">
+    <div class="sshdr" onclick="toggleScriptStep(this)"><div class="ssnum">6</div><div class="sslbl">Wrap-Up &amp; Next Steps</div><div class="sschev">▼</div></div>
+    <div class="ssbody">
+      <div class="sline">"Great! I'll walk you through signing up — it's quick and easy. After enrolling, you'll get a welcome email with your membership number. Download the LegalShield app and your provider law firm's number will be right there."</div>
+      <div class="tip">💡 <div><strong>After the call:</strong> Immediately update their lead status in the portal and log your call notes while fresh. Set a follow-up reminder if needed.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FAQs & OBJECTIONS ═══ -->
+<div id="faq" class="sec">
+  <div class="stitle">FAQs &amp; Objections</div>
+  <div class="ssub">Click to expand. 🔴 = objection — use your response. ❓ = info question.</div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"I already have a lawyer." 🔴<span class="fqc">▼</span></div>
+    <div class="fqa"><div class="obj">Objection</div><p>That's great — but even people with attorneys use LegalShield for everyday questions they'd never call their lawyer about. When did you last call them for a lease review or traffic ticket? Most don't — because it's $200+/hr. LegalShield handles all of that for a flat monthly fee. You keep your attorney for the big stuff.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"It's too expensive." 🔴<span class="fqc">▼</span></div>
+    <div class="fqa"><div class="obj">Objection</div><p>$35.95/month is about the cost of dinner out. One call to an outside attorney costs $200–$400/hr. If you ever need legal help even once, LegalShield pays for itself many times over. Most members get their money's worth on the very first call.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"How is this different from LegalZoom?" 🔴<span class="fqc">▼</span></div>
+    <div class="fqa"><div class="obj">Objection</div><p>LegalZoom is mainly a document template service — you fill out forms yourself. LegalShield connects you with a real human attorney in your state who gives actual legal advice, answers your specific questions, and can represent you. It's the difference between a template and a lawyer who picks up the phone.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"Is this a real law firm or a call center?" ❓<span class="fqc">▼</span></div>
+    <div class="fqa"><p>Real law firms. LegalShield has nearly 40 vetted provider law firms and 900+ attorneys across the US and Canada, averaging 22 years of experience. You're assigned to a dedicated firm in your state — not a generic hotline.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"What about pre-existing legal issues?" ❓<span class="fqc">▼</span></div>
+    <div class="fqa"><p>Most pre-existing situations still get a consultation and a 25% discount from your provider firm. Civil actions or IRS notices received before membership start are excluded from full coverage, but you still save significantly vs. hiring a lawyer cold.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"Can I cancel anytime?" ❓<span class="fqc">▼</span></div>
+    <div class="fqa"><p>Yes — cancel anytime in writing. Email memberservices@legalshield.com with your name, membership number, and cancellation request. Annual memberships can cancel after the first 12 months.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"Does it cover my whole family?" ❓<span class="fqc">▼</span></div>
+    <div class="fqa"><p>Yes! The Personal Plan covers you, your spouse, and dependents — all under the same flat monthly rate. It's one of the biggest value advantages of the plan.</p></div>
+  </div>
+  <div class="fq">
+    <div class="fqq" onclick="toggleFaq(this)">"I need to think about it." 🔴<span class="fqc">▼</span></div>
+    <div class="fqa"><div class="obj">Objection</div><p>Of course — I want you to feel comfortable. Just remember legal issues don't wait. The risk of signing up and not needing it is small. The risk of needing a lawyer without coverage can be very expensive. You can cancel in writing anytime. What specific concern can I answer right now?</p></div>
+  </div>
+</div>
+
+<!-- ═══ QUICK REFERENCE ═══ -->
+<div id="quick" class="sec">
+  <div class="stitle">Quick Reference</div>
+  <div class="ssub">Everything at a glance during a live call.</div>
+  <div class="qgrid">
+    <div class="qcard"><h4>📞 Key Numbers</h4><ul><li>Member Services: (800) 654-7757</li><li>Hours: Mon–Fri, 7am–7pm CST</li><li>Cancellation: (844) 714-8494</li><li>Member portal: accounts.legalshield.com</li><li>Cancel email: memberservices@legalshield.com</li></ul></div>
+    <div class="qcard"><h4>💰 Prices at a Glance</h4><ul><li>Personal: $35.95/mo</li><li>+ Home Business: ~$59/mo</li><li>+ Trial Defense: ~$54/mo</li><li>SB Essentials: $49/mo</li><li>SB Plus: $99/mo</li><li>SB Pro: $169/mo</li></ul></div>
+    <div class="qcard"><h4>✅ Always Included</h4><ul><li>Unlimited personal consultations</li><li>Attorneys avg 22 yrs experience</li><li>24/7/365 emergency access</li><li>Will &amp; estate doc prep</li><li>25% discount on outside services</li><li>Family coverage included</li></ul></div>
+    <div class="qcard"><h4>🎯 Best Plan Match</h4><ul><li>Individual/Family → Personal</li><li>Side hustle → + Home Biz</li><li>Rideshare/delivery → + Rideshare</li><li>Small business → Essentials/Plus</li><li>Growing biz → Plus/Pro</li><li>Trial concern → + Trial Defense</li></ul></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><div class="icb">🏆</div> Top 5 Value Statements — Use These!</div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <div style="background:var(--pp);border-radius:9px;padding:12px;font-size:.85rem;color:var(--tm);line-height:1.6;border-left:4px solid var(--pm)">"One hour with an outside attorney costs more than an entire month of LegalShield."</div>
+      <div style="background:var(--pp);border-radius:9px;padding:12px;font-size:.85rem;color:var(--tm);line-height:1.6;border-left:4px solid var(--pm)">"Over 4.5 million people already use LegalShield — it's proven, not experimental."</div>
+      <div style="background:var(--pp);border-radius:9px;padding:12px;font-size:.85rem;color:var(--tm);line-height:1.6;border-left:4px solid var(--pm)">"You get a real lawyer in your state — not a chatbot, not a template."</div>
+      <div style="background:var(--pp);border-radius:9px;padding:12px;font-size:.85rem;color:var(--tm);line-height:1.6;border-left:4px solid var(--pm)">"Your whole family is covered — spouse and kids — for the same flat rate."</div>
+      <div style="background:var(--pp);border-radius:9px;padding:12px;font-size:.85rem;color:var(--tm);line-height:1.6;border-left:4px solid var(--pm)">"Cancel anytime in writing. No long-term contracts. No risk."</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- NOTIFICATION AREA -->
+<div class="notif-banner" id="notif-area"></div>
+
+<!-- ADD LEAD MODAL -->
+<div class="ov" id="add-ov">
+  <div class="modal">
+    <button class="xbtn" onclick="closeAddModal()">×</button>
+    <h3>Add Lead Manually</h3>
+    <div class="frow">
+      <div class="fg"><label>First Name *</label><input type="text" id="al-fname" placeholder="Jane"></div>
+      <div class="fg"><label>Last Name *</label><input type="text" id="al-lname" placeholder="Doe"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Phone *</label><input type="tel" id="al-phone" placeholder="(555) 000-0000"></div>
+      <div class="fg"><label>Email</label><input type="email" id="al-email" placeholder="jane@email.com"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>ZIP Code</label><input type="text" id="al-zip" placeholder="33101" maxlength="5"></div>
+      <div class="fg"><label>Plan Interest</label>
+        <select id="al-int">
+          <option value="">Select</option>
+          <option>Personal / Family – $35.95/mo</option>
+          <option>Personal + Home Business – ~$59/mo</option>
+          <option>Personal + Trial Defense – ~$54/mo</option>
+          <option>SB Essentials – $49/mo</option>
+          <option>SB Plus – $99/mo</option>
+          <option>SB Pro – $169/mo</option>
+          <option>Not sure</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Best Call Time</label>
+        <select id="al-time">
+          <option value="">Select</option>
+          <option>Morning (8am–12pm)</option>
+          <option>Afternoon (12pm–5pm)</option>
+          <option>Evening (5pm–8pm)</option>
+        </select>
+      </div>
+      <div class="fg"><label>Status</label>
+        <select id="al-status">
+          <option value="New">New</option>
+          <option value="Called">Called</option>
+          <option value="Follow-Up">Follow-Up</option>
+          <option value="Enrolled">Enrolled</option>
+          <option value="Not Interested">Not Interested</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label>Follow-Up Reminder Date</label><input type="date" id="al-rem"></div>
+    <div class="fg"><label>Initial Notes</label><textarea id="al-notes" placeholder="Any context about this lead…"></textarea></div>
+    <div class="mbtns">
+      <button class="btsave" onclick="saveLead()">Save Lead</button>
+      <button class="btcanc" onclick="closeAddModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE LEAD MODAL -->
+<div class="ov" id="upd-ov">
+  <div class="modal">
+    <button class="xbtn" onclick="closeUpd()">×</button>
+    <h3 id="upd-title">Update Lead</h3>
+    <input type="hidden" id="upd-id">
+    <div class="fg"><label>Status</label>
+      <select id="upd-status">
+        <option value="New">New</option>
+        <option value="Called">Called</option>
+        <option value="Follow-Up">Follow-Up</option>
+        <option value="Enrolled">Enrolled</option>
+        <option value="Not Interested">Not Interested</option>
+      </select>
+    </div>
+    <div class="fg"><label>Follow-Up Reminder Date</label><input type="date" id="upd-rem"></div>
+    <div class="fg" style="margin-bottom:5px"><label>Add Call Log Entry</label><textarea id="upd-note" placeholder="Log what happened on this call, next steps, outcome…"></textarea></div>
+    <div id="upd-log-area"></div>
+    <div class="mbtns">
+      <button class="btsave" onclick="saveUpd()">Save</button>
+      <button class="btcanc" onclick="closeUpd()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMISSION MODAL -->
+<div class="ov" id="comm-ov">
+  <div class="modal">
+    <button class="xbtn" onclick="closeComm()">×</button>
+    <h3>Log Enrollment</h3>
+    <div class="fg"><label>Member Name *</label><input type="text" id="cm-name" placeholder="John Smith"></div>
+    <div class="fg"><label>Plan Enrolled *</label>
+      <select id="cm-plan">
+        <option value="">Select plan</option>
+        <option value="Personal Plan|35.95|45">Personal Plan ($35.95/mo)</option>
+        <option value="Personal + Home Business|59|70">Personal + Home Business (~$59/mo)</option>
+        <option value="Personal + Trial Defense|54|65">Personal + Trial Defense (~$54/mo)</option>
+        <option value="SB Essentials|49|65">SB Essentials ($49/mo)</option>
+        <option value="SB Plus|99|125">SB Plus ($99/mo)</option>
+        <option value="SB Pro|169|210">SB Pro ($169/mo)</option>
+      </select>
+    </div>
+    <div class="fg"><label>Link to Lead (optional)</label><select id="cm-lead"><option value="">None</option></select></div>
+    <div class="fg"><label>Enrollment Date</label><input type="date" id="cm-date"></div>
+    <div class="fg"><label>Notes</label><textarea id="cm-notes" placeholder="Any notes about this enrollment…"></textarea></div>
+    <div class="mbtns">
+      <button class="btsave" onclick="saveComm()">Log Enrollment</button>
+      <button class="btcanc" onclick="closeComm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- INVITE MEMBER MODAL -->
+<div class="ov" id="inv-ov">
+  <div class="modal">
+    <button class="xbtn" onclick="closeInviteModal()">×</button>
+    <h3>Invite Team Member</h3>
+    <div class="fg"><label>Full Name *</label><input type="text" id="inv-name" placeholder="John Smith"></div>
+    <div class="fg"><label>Email *</label><input type="email" id="inv-email" placeholder="john@email.com"></div>
+    <div class="fg"><label>Role *</label>
+      <select id="inv-role">
+        <option value="">Select role</option>
+        <option value="manager">Manager</option>
+        <option value="caller">Caller</option>
+      </select>
+    </div>
+    <div class="mbtns">
+      <button class="btsave" onclick="inviteMember()">Send Invite</button>
+      <button class="btcanc" onclick="closeInviteModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #portal-app -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/portal-auth.js"></script>
+<script src="/js/portal-leads.js"></script>
+<script src="/js/portal-commissions.js"></script>
+<script src="/js/portal-team.js"></script>
+<script src="/js/portal-dashboard.js"></script>
+</body>
+</html>
